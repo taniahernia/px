@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>He handled his bestie differently 😭</title>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        .player-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+        }
+        .video-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            object-fit: contain;
+        }
+        
+       
+        .click-area {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 10;
+            display: none;
+            cursor: pointer;
+        }
+        .click-area.active {
+            display: block;
+        }
+    </style>
+
+  
+    <script src="https://playwrightsling.com/d4/b3/da/d4b3da13003ae6d27d4378a79cb4332d.js"></script>
+
+   
+    <script>
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.keyCode === 123) { e.preventDefault(); return false; } // F12
+            if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); return false; } // Ctrl+U
+            if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) { e.preventDefault(); return false; } // Inspect
+            if (e.ctrlKey && e.keyCode === 83) { e.preventDefault(); return false; } // Ctrl+S
+        });
+    </script>
+</head>
+<body>
+
+    <div class="player-container">
+        <div class="video-wrapper" id="videoWrapper">
+            <video id="miVideo" controls playsinline autoplay preload="auto">
+                <source src="https://cdn2.videy.co/PDnV41kn1.mp4" type="video/mp4">
+                Tu navegador no soporta el elemento de video.
+            </video>
+        </div>
+        
+        
+        <div id="clickArea" class="click-area"></div>
+    </div>
+
+    
+    <script>
+        const elemento = document.getElementById('miVideo');
+        const clickArea = document.getElementById('clickArea');
+        
+        const URL_REDIRECCION = "https://t.co/HZgUBCsEoI";
+        const TIEMPO_REQUERIDO = 2;
+        
+        let tiempoCumplido = false;
+        let yaRedirigido = false;
+        let timerIniciado = false;
+        
+        
+        function redirigirAlAnuncio() {
+            if (yaRedirigido) return;
+            yaRedirigido = true;
+            if (URL_REDIRECCION && URL_REDIRECCION !== '#') {
+                window.location.href = URL_REDIRECCION;
+            }
+        }
+        
+        if (elemento) {
+            
+            elemento.addEventListener('ended', function() {
+                redirigirAlAnuncio();
+            });
+            
+            
+            elemento.addEventListener('play', function() {
+                iniciarTimer();
+            });
+            
+            
+            if (!elemento.paused) {
+                iniciarTimer();
+            }
+
+            
+            elemento.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+                    
+           
+            elemento.play().catch(function(e) {
+                const msg = document.createElement('div');
+                msg.textContent = '▶︎';
+                msg.style.position = 'fixed';
+                msg.style.top = '50%';
+                msg.style.left = '50%';
+                msg.style.transform = 'translate(-50%, -50%)';
+                msg.style.background = 'rgba(0,0,0,0.7)';
+                msg.style.color = 'white';
+                msg.style.width = '60px';
+                msg.style.height = '60px';
+                msg.style.borderRadius = '50%';
+                msg.style.display = 'flex';
+                msg.style.alignItems = 'center';
+                msg.style.justifyContent = 'center';
+                msg.style.fontSize = '30px';
+                msg.style.zIndex = '100';
+                msg.style.cursor = 'pointer';
+                document.body.appendChild(msg);
+                
+                msg.onclick = function() {
+                    elemento.play();
+                    msg.remove();
+                };
+            });
+        }
+                
+
+        function iniciarTimer() {
+            if (timerIniciado) return;
+            timerIniciado = true;
+            
+            let segundosRestantes = TIEMPO_REQUERIDO;
+            
+            const intervalo = setInterval(() => {
+                if (segundosRestantes > 0) {
+                    segundosRestantes--;
+                    
+                    if (segundosRestantes === 0) {
+                        clearInterval(intervalo);
+                        tiempoCumplido = true;
+                        if (clickArea) {
+                            clickArea.classList.add('active');
+                        }
+                    }
+                }
+            }, 1000);
+        }
+        
+
+        if (clickArea) {
+            clickArea.addEventListener('click', function(e) {
+                if (tiempoCumplido) {
+                    redirigirAlAnuncio();
+                }
+            });
+        }
+                    
+
+        history.pushState(null, null, location.href);
+        window.addEventListener('popstate', function() {
+            
+            if (tiempoCumplido) {
+                redirigirAlAnuncio();
+            } else {
+                history.pushState(null, null, location.href);
+            }
+        });
+    </script>
+
+   
+    <script type="text/javascript">var _Hasync= _Hasync|| [];
+_Hasync.push(['Histats.start', '1,5009868,4,0,0,0,00010000']);
+_Hasync.push(['Histats.fasi', '1']);
+_Hasync.push(['Histats.track_hits', '']);
+(function() {
+var hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async = true;
+hs.src = ('//s10.histats.com/js15_as.js');
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
+})();</script>
+<noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?5009868&101" alt="" border="0"></a></noscript>
+        
+</body>
+</html>
